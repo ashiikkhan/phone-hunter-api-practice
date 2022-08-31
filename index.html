@@ -29,12 +29,30 @@
           </button>
         </div>
       </section>
+      <!-- spinner -->
+      <section class="mb-4 d-none h-100" id="loader">
+        <div class="d-flex justify-content-center align-items-center">
+          <div class="spinner-border" role="status">
+            <span class="visually-hidden">Loading...</span>
+          </div>
+        </div>
+      </section>
       <!-- display phones -->
       <section class="mb-4">
         <div
           id="phones-container"
-          class="row row-cols-1 row-cols-md-3 sg-4"
+          class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 gap4"
         ></div>
+        <div>
+          <h3 id="no-found-msg" class="text-warning text-center d-none mt-4">
+            No Phone Found by Your Search. Please search again.
+          </h3>
+        </div>
+        <div id="see-more-item" class="text-center">
+          <button id="show-all" type="button" class="btn btn-primary">
+            See More..
+          </button>
+        </div>
       </section>
     </main>
 
