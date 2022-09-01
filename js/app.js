@@ -1,8 +1,7 @@
-const loadPhones = async (searchText = 'iphone', dataLimit) => {
+const loadPhones = async (searchText = 'iphone', dataLimit = 0) => {
   const url = `https://openapi.programming-hero.com/api/phones?search=${searchText}`;
   const response = await fetch(url);
   const data = await response.json();
-  console.log('hello show all', searchText, data.data, dataLimit);
   displayPhones(data.data, dataLimit);
 };
 
@@ -43,6 +42,7 @@ const displayPhones = (phones, dataLimit) => {
                 <p class="card-text">
                   Brand: ${phone.brand}
                 </p>
+                <button onclick="loadPhoneDetails('${phone.slug}')" href="#" class="btn btn-primary"> Show Details </button>
               </div>
             </div>
   `;
@@ -55,13 +55,19 @@ const processSearch = (dataLimit) => {
   const searchField = document.getElementById('form-input');
   const searchText = searchField.value;
   loadPhones(searchText, dataLimit);
-  console.log(searchText);
   //   searchField.value = ``;
 };
 
 const searchBtn = document.getElementById('btn-search');
 searchBtn.addEventListener('click', function () {
   processSearch(9);
+});
+
+const inputField = document.getElementById('form-input');
+inputField.addEventListener('keypress', function (e) {
+  if (e.key === 'Enter') {
+    processSearch(9);
+  }
 });
 
 const toggleSpinner = (isLoading) => {
@@ -77,4 +83,11 @@ const showAllBtn = document.getElementById('show-all');
 showAllBtn.addEventListener('click', function () {
   processSearch();
 });
-// loadPhones();
+loadPhones();
+
+const loadPhoneDetails = async (productId) => {
+  const url = `https://openapi.programming-hero.com/api/phone/${productId}`;
+  const response = await fetch(url);
+  const data = await response.json();
+  console.log(data.data);
+};
