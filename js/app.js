@@ -121,3 +121,8 @@ const displayPhoneDetails = (phone) => {
 };
 
 loadPhones();
+
+/**
+ * synchronous vs asynchronous
+ *
+ */
