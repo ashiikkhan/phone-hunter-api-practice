@@ -1,4 +1,4 @@
-const loadPhones = async (searchText = 'iphone', dataLimit = 0) => {
+const loadPhones = async (searchText = 'iphone', dataLimit) => {
   const url = `https://openapi.programming-hero.com/api/phones?search=${searchText}`;
   const response = await fetch(url);
   const data = await response.json();
@@ -23,7 +23,7 @@ const displayPhones = (phones, dataLimit) => {
   const msg = document.getElementById('no-found-msg');
   if (phones.length === 0) {
     msg.classList.remove('d-none');
-    toggleSpinner(false);
+    toggleSpinner(true);
   } else {
     msg.classList.add('d-none');
   }
@@ -42,7 +42,13 @@ const displayPhones = (phones, dataLimit) => {
                 <p class="card-text">
                   Brand: ${phone.brand}
                 </p>
-                <button onclick="loadPhoneDetails('${phone.slug}')" href="#" class="btn btn-primary"> Show Details </button>
+                <button 
+                    data-bs-toggle="modal"
+                    data-bs-target="#exampleModal"  
+                    onclick="loadPhoneDetails('${phone.slug}')" 
+                    href="#" 
+                    class="btn btn-primary"
+                    > Show Details </button>
               </div>
             </div>
   `;
@@ -70,6 +76,7 @@ inputField.addEventListener('keypress', function (e) {
   }
 });
 
+// spinner
 const toggleSpinner = (isLoading) => {
   const laoderSection = document.getElementById('loader');
   if (isLoading) {
@@ -83,11 +90,34 @@ const showAllBtn = document.getElementById('show-all');
 showAllBtn.addEventListener('click', function () {
   processSearch();
 });
-loadPhones();
 
 const loadPhoneDetails = async (productId) => {
   const url = `https://openapi.programming-hero.com/api/phone/${productId}`;
   const response = await fetch(url);
   const data = await response.json();
-  console.log(data.data);
+  displayPhoneDetails(data.data);
 };
+
+const displayPhoneDetails = (phone) => {
+  console.log(phone);
+  console.log(phone.mainFeatures.sensors);
+  const [face, accelometer, gryo, proximity, compass] =
+    phone.mainFeatures.sensors;
+  const modalTitle = document.getElementById('exampleModalLabel');
+  modalTitle.innerText = phone.name;
+  const bodyLeft = document.getElementById('body-left');
+  bodyLeft.innerHTML = `
+        <img src="${phone.image}" alt="" />
+  `;
+  const bodyRight = document.getElementById('body-right');
+  bodyRight.innerHTML = `
+        <h5>Features:</h5>
+        <p>Chipset:  ${phone.mainFeatures.chipSet}</p>
+        <p>Display Size:  ${phone.mainFeatures.displaySize}</p>
+        <p>Memory:  ${phone.mainFeatures.memory}</p>
+        <p>Sensors:  ${face}, ${accelometer}, ${gryo}, ${proximity}, ${compass}</p>
+        <p>Storage:  ${phone.mainFeatures.storage}</p>
+  `;
+};
+
+loadPhones();
